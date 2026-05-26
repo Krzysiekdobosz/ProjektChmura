@@ -98,7 +98,7 @@ function panelLink() {
 
     <!-- Content -->
     <main class="flex-1">
-      <RouterView />
+      <slot />
     </main>
 
     <!-- Footer -->

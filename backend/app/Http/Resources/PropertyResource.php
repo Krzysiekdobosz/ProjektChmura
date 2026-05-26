@@ -7,6 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropertyResource extends JsonResource
 {
+    private static function resolveImageUrl(?string $path): ?string
+    {
+        if (!$path) return null;
+        if (str_starts_with($path, 'http')) return $path;
+        return asset('storage/' . $path);
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -86,17 +93,19 @@ class PropertyResource extends JsonResource
             'images'  => $this->whenLoaded('images', fn() =>
                 $this->images->map(fn($img) => [
                     'id'       => $img->id,
-                    'url'      => asset('storage/' . $img->path),
+                    'url'      => self::resolveImageUrl($img->path),
                     'is_main'  => $img->id === $this->main_image_id,
                     'order'    => $img->order,
                 ])
             ),
             'main_image' => $this->whenLoaded('mainImage', fn() =>
-                $this->mainImage ? asset('storage/' . $this->mainImage->path) : null
+                $this->mainImage ? self::resolveImageUrl($this->mainImage->path) : null
             ),
             'main_image_url' => $this->when(
                 $this->relationLoaded('images') && $this->images->isNotEmpty(),
-                fn() => asset('storage/' . ($this->images->firstWhere('id', $this->main_image_id) ?? $this->images->first())?->path)
+                fn() => self::resolveImageUrl(
+                    ($this->images->firstWhere('id', $this->main_image_id) ?? $this->images->first())?->path
+                )
             ),
         ];
     }
