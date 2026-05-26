@@ -31,10 +31,10 @@ Route::prefix('v1')->group(function () {
 
     // ─── AUTH (publiczne) ───────────────────────────────────────────────────
     Route::prefix('auth')->group(function () {
-        Route::post('register',        [AuthController::class, 'register']);
-        Route::post('login',           [AuthController::class, 'login']);
-        Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-        Route::post('reset-password',  [AuthController::class, 'resetPassword']);
+        Route::post('register',        [AuthController::class, 'register'])->middleware('throttle:10,1');
+        Route::post('login',           [AuthController::class, 'login'])->middleware('throttle:10,1');
+        Route::post('forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+        Route::post('reset-password',  [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
     });
 
     // ─── PUBLICZNE ──────────────────────────────────────────────────────────
@@ -67,7 +67,7 @@ Route::prefix('v1')->group(function () {
         Route::get('conversations',                           [ConversationController::class, 'index']);
         Route::post('conversations',                          [ConversationController::class, 'store']);
         Route::get('conversations/{id}',                      [ConversationController::class, 'show']);
-        Route::post('conversations/{id}/messages',            [MessageController::class, 'store']);
+        Route::post('conversations/{id}/messages',            [MessageController::class, 'store'])->middleware('throttle:30,1');
         Route::patch('conversations/{id}/messages/read',      [MessageController::class, 'markRead']);
 
         // Rezerwacje oglądania (użytkownik)
@@ -83,9 +83,11 @@ Route::prefix('v1')->group(function () {
         // ─── PANEL WŁAŚCICIELA ───────────────────────────────────────────
         Route::middleware('role:owner|admin')->prefix('owner')->group(function () {
             Route::apiResource('properties', OwnerPropertyController::class);
+            Route::post('properties/{id}/publish',            [OwnerPropertyController::class, 'publish']);
             Route::post('properties/{id}/images',             [PropertyImageController::class, 'store']);
             Route::patch('properties/{id}/images/{imageId}/main', [PropertyImageController::class, 'setMain']);
             Route::delete('properties/{id}/images/{imageId}', [PropertyImageController::class, 'destroy']);
+            Route::patch('properties/{id}/images/reorder',     [PropertyImageController::class, 'reorder']);
 
             Route::get('viewings',                [OwnerViewingController::class, 'index']);
             Route::patch('viewings/{id}/status',  [OwnerViewingController::class, 'updateStatus']);
