@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: najmuj-mieszkanie
+data:
+  APP_NAME: "NajmujMieszkanie"
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  APP_URL: "http://najmuj.local"
+  DB_CONNECTION: "mysql"
+  DB_HOST: "mysql-service"
+  DB_PORT: "3306"
+  DB_DATABASE: "najmuj_mieszkanie"
+  DB_USERNAME: "najmuj_user"
+  FRONTEND_URL: "http://najmuj.local"
+  SANCTUM_STATEFUL_DOMAINS: "najmuj.local"
+  SESSION_DRIVER: "file"
+  CACHE_STORE: "file"
+  QUEUE_CONNECTION: "sync"
+  MAIL_MAILER: "log"
+  RUN_SEEDER: "true"
