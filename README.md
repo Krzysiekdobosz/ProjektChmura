@@ -105,11 +105,13 @@ VITE_APP_URL=http://localhost:5173
 
 ## Konta domyślne (po seedowaniu)
 
-| Rola | Email | Hasło |
-|---|---|---|
-| Administrator | admin@example.com | password |
-| Właściciel | owner@example.com | password |
-| Użytkownik | user@example.com | password |
+| Rola | Nazwa | Email | Hasło | Panel |
+|---|---|---|---|---|
+| Administrator | Administrator | `admin@example.com` | `password` | `/admin/dashboard` |
+| Właściciel | Jan Właściciel | `owner@example.com` | `password` | `/wlasciciel/dashboard` |
+| Użytkownik | Anna Kowalska | `user@example.com` | `password` | `/panel/dashboard` |
+
+> Po zalogowaniu aplikacja automatycznie przekierowuje do odpowiedniego panelu na podstawie roli.
 
 ---
 
