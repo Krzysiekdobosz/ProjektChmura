@@ -4,7 +4,7 @@ set -e
 echo "Waiting for MySQL to be ready..."
 MAX_TRIES=60
 TRIES=0
-until mysqladmin ping -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" --silent 2>/dev/null; do
+until mysql -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" --skip-ssl --connect-timeout=2 -e "SELECT 1" > /dev/null 2>&1; do
     TRIES=$((TRIES + 1))
     if [ "$TRIES" -ge "$MAX_TRIES" ]; then
         echo "MySQL did not become ready in time. Exiting."
