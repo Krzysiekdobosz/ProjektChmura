@@ -6,6 +6,7 @@ use App\Enums\ViewingStatus;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Property;
 use App\Models\PropertyViewing;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class PropertyViewingController extends ApiController
         $request->validate([
             'property_id' => ['required', 'integer', 'exists:properties,id'],
             'proposed_at' => ['required', 'date', 'after:now'],
-            'note'        => ['nullable', 'string', 'max:500'],
+            'note' => ['nullable', 'string', 'max:500'],
         ]);
 
         $property = Property::findOrFail($request->property_id);
@@ -35,8 +36,8 @@ class PropertyViewingController extends ApiController
         $conflict = PropertyViewing::where('property_id', $property->id)
             ->where('status', ViewingStatus::Accepted->value)
             ->whereBetween('proposed_at', [
-                \Carbon\Carbon::parse($request->proposed_at)->subMinutes(59),
-                \Carbon\Carbon::parse($request->proposed_at)->addMinutes(59),
+                Carbon::parse($request->proposed_at)->subMinutes(59),
+                Carbon::parse($request->proposed_at)->addMinutes(59),
             ])->exists();
 
         if ($conflict) {
@@ -45,11 +46,11 @@ class PropertyViewingController extends ApiController
 
         $viewing = PropertyViewing::create([
             'property_id' => $property->id,
-            'user_id'     => $request->user()->id,
-            'owner_id'    => $property->user_id,
+            'user_id' => $request->user()->id,
+            'owner_id' => $property->user_id,
             'proposed_at' => $request->proposed_at,
-            'note'        => $request->note,
-            'status'      => ViewingStatus::Pending->value,
+            'note' => $request->note,
+            'status' => ViewingStatus::Pending->value,
         ]);
 
         return $this->created($this->format($viewing->load(['property:id,title,slug', 'owner:id,name,phone'])), 'Prośba o oglądanie wysłana.');
@@ -71,14 +72,14 @@ class PropertyViewingController extends ApiController
     private function format(PropertyViewing $v): array
     {
         return [
-            'id'          => $v->id,
-            'property'    => $v->property ? ['id' => $v->property->id, 'title' => $v->property->title, 'slug' => $v->property->slug, 'city' => $v->property->city] : null,
-            'owner'       => $v->owner ? ['id' => $v->owner->id, 'name' => $v->owner->name, 'phone' => $v->owner->phone] : null,
+            'id' => $v->id,
+            'property' => $v->property ? ['id' => $v->property->id, 'title' => $v->property->title, 'slug' => $v->property->slug, 'city' => $v->property->city] : null,
+            'owner' => $v->owner ? ['id' => $v->owner->id, 'name' => $v->owner->name, 'phone' => $v->owner->phone] : null,
             'proposed_at' => $v->proposed_at?->toIso8601String(),
-            'status'      => $v->status?->value,
-            'status_label'=> $v->status?->label(),
-            'note'        => $v->note,
-            'owner_note'  => $v->owner_note,
+            'status' => $v->status?->value,
+            'status_label' => $v->status?->label(),
+            'note' => $v->note,
+            'owner_note' => $v->owner_note,
         ];
     }
 }

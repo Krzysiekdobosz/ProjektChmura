@@ -30,7 +30,7 @@ class ContactMessageController extends ApiController
     public function updateStatus(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'status'     => ['required', Rule::enum(ContactMessageStatus::class)],
+            'status' => ['required', Rule::enum(ContactMessageStatus::class)],
             'admin_note' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -43,16 +43,16 @@ class ContactMessageController extends ApiController
     private function format(ContactMessage $m): array
     {
         return [
-            'id'          => $m->id,
-            'name'        => $m->name,
-            'email'       => $m->email,
-            'subject'     => $m->subject,
-            'body'        => $m->body,
-            'status'      => $m->status?->value,
-            'status_label'=> $m->status?->label(),
-            'admin_note'  => $m->admin_note,
-            'user'        => $m->user ? ['id' => $m->user->id, 'name' => $m->user->name] : null,
-            'created_at'  => $m->created_at?->toIso8601String(),
+            'id' => $m->id,
+            'name' => $m->name,
+            'email' => $m->email,
+            'subject' => $m->subject,
+            'body' => $m->body,
+            'status' => $m->status?->value,
+            'status_label' => $m->status?->label(),
+            'admin_note' => $m->admin_note,
+            'user' => $m->user ? ['id' => $m->user->id, 'name' => $m->user->name] : null,
+            'created_at' => $m->created_at?->toIso8601String(),
         ];
     }
 }

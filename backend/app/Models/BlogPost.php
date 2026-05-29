@@ -18,7 +18,7 @@ class BlogPost extends Model
     protected function casts(): array
     {
         return [
-            'status'       => BlogPostStatus::class,
+            'status' => BlogPostStatus::class,
             'published_at' => 'datetime',
         ];
     }
@@ -41,7 +41,7 @@ class BlogPost extends Model
     public function scopePublished($query)
     {
         return $query->where('status', BlogPostStatus::Published)
-                     ->whereNotNull('published_at')
-                     ->where('published_at', '<=', now());
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 }

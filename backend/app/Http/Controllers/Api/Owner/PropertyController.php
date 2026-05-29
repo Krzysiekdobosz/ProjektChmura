@@ -15,7 +15,9 @@ use Illuminate\Support\Str;
 
 class PropertyController extends ApiController
 {
-    public function __construct(private ActivityLogService $log) {}
+    public function __construct(private ActivityLogService $log)
+    {
+    }
 
     public function index(Request $request): JsonResponse
     {
@@ -33,8 +35,8 @@ class PropertyController extends ApiController
     {
         $data = $request->validated();
         $data['user_id'] = $request->user()->id;
-        $data['slug']    = $this->uniqueSlug($data['title']);
-        $data['status']  = PropertyStatus::Draft->value;
+        $data['slug'] = $this->uniqueSlug($data['title']);
+        $data['status'] = PropertyStatus::Draft->value;
 
         $property = Property::create($data);
 
@@ -97,7 +99,7 @@ class PropertyController extends ApiController
     {
         $base = Str::slug($title);
         $slug = $base;
-        $i    = 1;
+        $i = 1;
         while (Property::where('slug', $slug)->exists()) {
             $slug = "{$base}-{$i}";
             $i++;

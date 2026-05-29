@@ -15,7 +15,7 @@ class ProfileController extends ApiController
         $user = $request->user();
 
         $user->update([
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
         ]);
@@ -27,9 +27,9 @@ class ProfileController extends ApiController
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
-                'bio'           => $request->bio,
-                'city'          => $request->city,
-                'voivodeship'   => $request->voivodeship,
+                'bio' => $request->bio,
+                'city' => $request->city,
+                'voivodeship' => $request->voivodeship,
                 'date_of_birth' => $request->date_of_birth,
             ]
         );

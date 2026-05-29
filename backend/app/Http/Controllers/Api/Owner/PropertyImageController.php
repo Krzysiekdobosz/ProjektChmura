@@ -13,14 +13,16 @@ use Illuminate\Support\Str;
 
 class PropertyImageController extends ApiController
 {
-    public function __construct(private ActivityLogService $log) {}
+    public function __construct(private ActivityLogService $log)
+    {
+    }
 
     public function store(Request $request, int $id): JsonResponse
     {
         $property = Property::where('user_id', $request->user()->id)->findOrFail($id);
 
         $request->validate([
-            'images'   => ['required', 'array', 'max:20'],
+            'images' => ['required', 'array', 'max:20'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
 
@@ -29,14 +31,14 @@ class PropertyImageController extends ApiController
 
         foreach ($request->file('images') as $file) {
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path     = $file->storeAs("properties/{$property->id}", $filename, 'public');
+            $path = $file->storeAs("properties/{$property->id}", $filename, 'public');
 
             $image = PropertyImage::create([
                 'property_id' => $property->id,
-                'path'        => $path,
-                'filename'    => $file->getClientOriginalName(),
-                'order'       => ++$maxOrder,
-                'is_main'     => false,
+                'path' => $path,
+                'filename' => $file->getClientOriginalName(),
+                'order' => ++$maxOrder,
+                'is_main' => false,
             ]);
 
             if (!$property->main_image_id) {
@@ -44,10 +46,10 @@ class PropertyImageController extends ApiController
             }
 
             $uploaded[] = [
-                'id'      => $image->id,
-                'url'     => asset('storage/' . $path),
+                'id' => $image->id,
+                'url' => asset('storage/' . $path),
                 'is_main' => $image->id === $property->fresh()->main_image_id,
-                'order'   => $image->order,
+                'order' => $image->order,
             ];
         }
 
@@ -71,7 +73,7 @@ class PropertyImageController extends ApiController
     public function destroy(Request $request, int $id, int $imageId): JsonResponse
     {
         $property = Property::where('user_id', $request->user()->id)->findOrFail($id);
-        $image    = PropertyImage::where('property_id', $property->id)->findOrFail($imageId);
+        $image = PropertyImage::where('property_id', $property->id)->findOrFail($imageId);
 
         Storage::disk('public')->delete($image->path);
         $image->delete();

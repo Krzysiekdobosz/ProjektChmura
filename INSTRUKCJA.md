@@ -172,6 +172,15 @@ Frontend bedzie dostepny pod adresem: `http://localhost:5173`
 
 Aplikacja jest skonteneryzowana i gotowa do uruchomienia w lokalnym klastrze Kubernetes przy uzyciu Minikube. Wszystkie pliki manifestow znajduja sie w katalogu `k8s/`.
 
+> **WAZNE (Windows + Docker driver):** Po wdrozeniu nalezy uruchomic port-forward w oknie PowerShell jako Administrator:
+> ```powershell
+> kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 80:80
+> ```
+> Oraz dodac do `C:\Windows\System32\drivers\etc\hosts`:
+> ```
+> 127.0.0.1  najmuj.local
+> ```
+
 ### Architektura klastra
 
 ```
@@ -645,6 +654,45 @@ docker build \
   -t najmuj-frontend:latest \
   ./frontend
 kubectl rollout restart deployment/frontend -n najmuj-mieszkanie
+```
+
+---
+
+---
+
+## Codzienne uruchomienie Minikube (po konfiguracji)
+
+1. Uruchom **Docker Desktop** i poczekaj az wieloryb w pasku zadan przestanie sie krecic
+2. W PowerShell:
+```powershell
+minikube start
+```
+3. W PowerShell jako **Administrator**:
+```powershell
+kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 80:80
+```
+4. Otworz przegladarke: http://najmuj.local
+
+---
+
+## Przebudowa po zmianie kodu
+
+### Backend (Laravel):
+```powershell
+cd "B:\Chmura projekt zaliczeniowy\ProjektZaliczeniowy"
+& minikube -p minikube docker-env --shell powershell | Invoke-Expression
+docker build -t najmuj-backend:latest ./backend
+kubectl rollout restart deployment/backend -n najmuj-mieszkanie
+kubectl rollout status deployment/backend -n najmuj-mieszkanie
+```
+
+### Frontend (Vue):
+```powershell
+cd "B:\Chmura projekt zaliczeniowy\ProjektZaliczeniowy"
+& minikube -p minikube docker-env --shell powershell | Invoke-Expression
+docker build --build-arg VITE_API_URL=http://najmuj.local/api/v1 --build-arg VITE_APP_NAME=NajmujMieszkanie -t najmuj-frontend:latest ./frontend
+kubectl rollout restart deployment/frontend -n najmuj-mieszkanie
+kubectl rollout status deployment/frontend -n najmuj-mieszkanie
 ```
 
 ---

@@ -10,10 +10,10 @@ class NotificationService
     {
         return Notification::create([
             'user_id' => $userId,
-            'type'    => $type,
-            'title'   => $title,
-            'body'    => $body,
-            'data'    => $data,
+            'type' => $type,
+            'title' => $title,
+            'body' => $body,
+            'data' => $data,
         ]);
     }
 

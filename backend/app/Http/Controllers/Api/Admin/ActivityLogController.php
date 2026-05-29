@@ -18,14 +18,14 @@ class ActivityLogController extends ApiController
             ->paginate(50);
 
         return $this->paginated($logs, $logs->getCollection()->map(fn($l) => [
-            'id'           => $l->id,
-            'action'       => $l->action,
-            'description'  => $l->description,
+            'id' => $l->id,
+            'action' => $l->action,
+            'description' => $l->description,
             'subject_type' => $l->subject_type,
-            'subject_id'   => $l->subject_id,
-            'ip_address'   => $l->ip_address,
-            'user'         => $l->user ? ['id' => $l->user->id, 'name' => $l->user->name] : null,
-            'created_at'   => $l->created_at?->toIso8601String(),
+            'subject_id' => $l->subject_id,
+            'ip_address' => $l->ip_address,
+            'user' => $l->user ? ['id' => $l->user->id, 'name' => $l->user->name] : null,
+            'created_at' => $l->created_at?->toIso8601String(),
         ]));
     }
 }

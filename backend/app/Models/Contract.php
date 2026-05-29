@@ -22,9 +22,9 @@ class Contract extends Model
     protected function casts(): array
     {
         return [
-            'status'       => ContractStatus::class,
-            'start_date'   => 'date',
-            'end_date'     => 'date',
+            'status' => ContractStatus::class,
+            'start_date' => 'date',
+            'end_date' => 'date',
             'generated_at' => 'datetime',
         ];
     }

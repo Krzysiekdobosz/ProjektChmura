@@ -12,9 +12,9 @@ class PageController extends ApiController
     public function index(): JsonResponse
     {
         $pages = Page::orderBy('title')->get()->map(fn($p) => [
-            'id'     => $p->id,
-            'title'  => $p->title,
-            'slug'   => $p->slug,
+            'id' => $p->id,
+            'title' => $p->title,
+            'slug' => $p->slug,
             'status' => $p->status,
         ]);
 
@@ -26,11 +26,11 @@ class PageController extends ApiController
         $page = Page::findOrFail($id);
 
         $page->update($request->validate([
-            'title'            => ['sometimes', 'string', 'max:255'],
-            'content'          => ['sometimes', 'string'],
-            'meta_title'       => ['nullable', 'string', 'max:255'],
+            'title' => ['sometimes', 'string', 'max:255'],
+            'content' => ['sometimes', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:500'],
-            'status'           => ['sometimes', 'in:published,draft'],
+            'status' => ['sometimes', 'in:published,draft'],
         ]));
 
         return $this->success(['id' => $page->id, 'title' => $page->title, 'slug' => $page->slug, 'content' => $page->content], 'Strona zaktualizowana.');

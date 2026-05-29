@@ -21,17 +21,17 @@ class MessageController extends ApiController
 
         $message = $conversation->messages()->create([
             'sender_id' => $user->id,
-            'body'      => $request->body,
+            'body' => $request->body,
         ]);
 
         $conversation->update(['last_message_at' => now()]);
 
         return $this->created([
-            'id'         => $message->id,
-            'body'       => $message->body,
-            'sender'     => ['id' => $user->id, 'name' => $user->name],
-            'is_mine'    => true,
-            'is_read'    => false,
+            'id' => $message->id,
+            'body' => $message->body,
+            'sender' => ['id' => $user->id, 'name' => $user->name],
+            'is_mine' => true,
+            'is_read' => false,
             'created_at' => $message->created_at?->toIso8601String(),
         ], 'Wiadomość wysłana.');
     }

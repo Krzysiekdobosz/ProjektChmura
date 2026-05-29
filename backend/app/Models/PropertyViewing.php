@@ -17,7 +17,7 @@ class PropertyViewing extends Model
     {
         return [
             'proposed_at' => 'datetime',
-            'status'      => ViewingStatus::class,
+            'status' => ViewingStatus::class,
         ];
     }
 

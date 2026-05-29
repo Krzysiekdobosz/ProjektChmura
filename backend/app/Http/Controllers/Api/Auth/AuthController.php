@@ -21,15 +21,17 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends ApiController
 {
-    public function __construct(private ActivityLogService $log) {}
+    public function __construct(private ActivityLogService $log)
+    {
+    }
 
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
-            'phone'    => $request->phone,
+            'phone' => $request->phone,
         ]);
 
         $role = in_array($request->role, ['user', 'owner']) ? $request->role : 'user';
@@ -45,7 +47,7 @@ class AuthController extends ApiController
 
         return $this->created([
             'token' => $token,
-            'user'  => new UserResource($user->load('profile')),
+            'user' => new UserResource($user->load('profile')),
         ], 'Konto zostało utworzone.');
     }
 
@@ -71,7 +73,7 @@ class AuthController extends ApiController
 
         return $this->success([
             'token' => $token,
-            'user'  => new UserResource($user->load('profile')),
+            'user' => new UserResource($user->load('profile')),
         ], 'Zalogowano pomyślnie.');
     }
 

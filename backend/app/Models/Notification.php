@@ -17,9 +17,9 @@ class Notification extends Model
     protected function casts(): array
     {
         return [
-            'data'       => 'array',
-            'is_read'    => 'boolean',
-            'read_at'    => 'datetime',
+            'data' => 'array',
+            'is_read' => 'boolean',
+            'read_at' => 'datetime',
             'created_at' => 'datetime',
         ];
     }

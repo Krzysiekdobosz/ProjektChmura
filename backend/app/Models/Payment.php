@@ -18,11 +18,11 @@ class Payment extends Model
     protected function casts(): array
     {
         return [
-            'type'     => PaymentType::class,
-            'status'   => PaymentStatus::class,
+            'type' => PaymentType::class,
+            'status' => PaymentStatus::class,
             'due_date' => 'date',
-            'paid_at'  => 'datetime',
-            'amount'   => 'decimal:2',
+            'paid_at' => 'datetime',
+            'amount' => 'decimal:2',
         ];
     }
 

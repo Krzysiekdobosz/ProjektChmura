@@ -14,7 +14,7 @@ class UserController extends ApiController
     public function index(Request $request): JsonResponse
     {
         $users = User::with('profile', 'roles')
-            ->when($request->role,   fn($q, $r) => $q->role($r))
+            ->when($request->role, fn($q, $r) => $q->role($r))
             ->when($request->search, fn($q, $s) => $q->where('name', 'like', "%$s%")->orWhere('email', 'like', "%$s%"))
             ->when(isset($request->is_active), fn($q) => $q->where('is_active', filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)))
             ->orderByDesc('created_at')

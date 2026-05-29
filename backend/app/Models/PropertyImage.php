@@ -15,7 +15,7 @@ class PropertyImage extends Model
     {
         return [
             'is_main' => 'boolean',
-            'order'   => 'integer',
+            'order' => 'integer',
         ];
     }
 

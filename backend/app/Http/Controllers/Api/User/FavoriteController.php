@@ -40,7 +40,7 @@ class FavoriteController extends ApiController
         }
 
         Favorite::create([
-            'user_id'     => $request->user()->id,
+            'user_id' => $request->user()->id,
             'property_id' => $request->property_id,
         ]);
 

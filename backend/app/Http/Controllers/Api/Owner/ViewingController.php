@@ -20,28 +20,28 @@ class ViewingController extends ApiController
             ->paginate(20);
 
         return $this->paginated($viewings, $viewings->getCollection()->map(fn($v) => [
-            'id'          => $v->id,
-            'property'    => $v->property ? ['id' => $v->property->id, 'title' => $v->property->title, 'slug' => $v->property->slug, 'city' => $v->property->city] : null,
-            'user'        => $v->user ? ['id' => $v->user->id, 'name' => $v->user->name, 'phone' => $v->user->phone, 'email' => $v->user->email] : null,
+            'id' => $v->id,
+            'property' => $v->property ? ['id' => $v->property->id, 'title' => $v->property->title, 'slug' => $v->property->slug, 'city' => $v->property->city] : null,
+            'user' => $v->user ? ['id' => $v->user->id, 'name' => $v->user->name, 'phone' => $v->user->phone, 'email' => $v->user->email] : null,
             'proposed_at' => $v->proposed_at?->toIso8601String(),
-            'status'      => $v->status?->value,
-            'status_label'=> $v->status?->label(),
-            'note'        => $v->note,
-            'owner_note'  => $v->owner_note,
+            'status' => $v->status?->value,
+            'status_label' => $v->status?->label(),
+            'note' => $v->note,
+            'owner_note' => $v->owner_note,
         ]));
     }
 
     public function updateStatus(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'status'     => ['required', Rule::enum(ViewingStatus::class)],
+            'status' => ['required', Rule::enum(ViewingStatus::class)],
             'owner_note' => ['nullable', 'string', 'max:500'],
         ]);
 
         $viewing = PropertyViewing::where('owner_id', $request->user()->id)->findOrFail($id);
 
         $viewing->update([
-            'status'     => $request->status,
+            'status' => $request->status,
             'owner_note' => $request->owner_note,
         ]);
 

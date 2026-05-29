@@ -14,9 +14,9 @@ class BlogCategoryController extends ApiController
             ->orderBy('name')
             ->get()
             ->map(fn($c) => [
-                'id'          => $c->id,
-                'name'        => $c->name,
-                'slug'        => $c->slug,
+                'id' => $c->id,
+                'name' => $c->name,
+                'slug' => $c->slug,
                 'posts_count' => $c->posts_count,
             ]);
 
